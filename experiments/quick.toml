@@ -1,0 +1,33 @@
+# Quick smoke test (minutes, not hours).
+#
+# Usage:
+#   just smoke
+#   just config=experiments/quick.toml train-all
+
+seeds = [42]
+save_dir = "out/models_quick"
+results_dir = "out/results_quick"
+
+[[strategies]]
+name = "vanilla"
+delta = 1.0
+
+[[strategies]]
+name = "delta_uniform"
+delta = 0.5
+
+[[strategies]]
+name = "pfsp"
+delta = 0.0
+
+[selfplay]
+total_rounds = 10
+rounds_per_side = 1
+blue_pretrain_path = "out/models/blue_pretrained.pt"
+red_pretrain_path = "out/models/red_pretrained.pt"
+
+[eval]
+br_steps = 10_000
+crossplay_episodes = 50
+crossplay_checkpoints = 5
+exploit_checkpoints = 3

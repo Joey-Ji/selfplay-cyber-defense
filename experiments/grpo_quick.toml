@@ -1,0 +1,44 @@
+# Quick GRPO smoke test (minutes, not hours).
+#
+# Usage:
+#   python scripts/train_all.py --config experiments/grpo_quick.toml
+
+algorithm = "grpo"
+seeds = [42]
+save_dir = "out/models_grpo_quick"
+results_dir = "out/results_grpo_quick"
+
+[[strategies]]
+name = "vanilla"
+delta = 1.0
+
+[[strategies]]
+name = "delta_uniform"
+delta = 0.5
+
+[[strategies]]
+name = "pfsp"
+delta = 0.0
+
+[grpo]
+learning_rate = 0.001
+gamma = 0.99
+clip_range = 0.2
+n_epochs = 4
+group_size = 4
+batch_size = 32
+ent_coef = 0.01
+kl_coef = 0.1
+ref_update_freq = 5
+
+[selfplay]
+total_rounds = 10
+rounds_per_side = 1
+blue_pretrain_path = "out/models/blue_pretrained.pt"
+red_pretrain_path = "out/models/red_pretrained.pt"
+
+[eval]
+br_steps = 10_000
+crossplay_episodes = 50
+crossplay_checkpoints = 5
+exploit_checkpoints = 3
